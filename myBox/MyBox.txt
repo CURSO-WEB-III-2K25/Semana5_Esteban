@@ -1,0 +1,283 @@
+================================================================================================
+Institucion..: Universidad Técnica Nacional
+Sede.........: Del Pacífico
+Carrera......: Tecnologías de Información
+Curso........: ITI-621 - Tecnologías y Sistema Web III
+Periodo......: 3-2025
+Documento....: MyBox.txt
+Objetivos....: Demostración de uso de comandos de sistema operativo con PHP, simulando el 
+               servicio de DropBox, o Google Drive.
+Profesor.....: Jorge Ruiz (york)
+Estudiante...:
+================================================================================================	
+
+MyBox installation
+
+Step 01 - Upgrade system
+
+	- apt update
+	
+	- apt upgrade (if required)
+	
+	
+Step 02 - Publish the MyBox application using FTP connection
+
+	- Download MyBox.zip file from Virtual Campus in your local machine
+	
+	- Unzip in your work directory  
+
+	- Open Filezilla Client
+	
+		- Host......: 10.236.2.154
+		- Username..: york
+		- Password..: parda99*
+		- Port......: 21
+		
+	- Drag and Drop the MyBox directory into remote location 	
+		
+
+Step 03 - Create database on MySQL.
+
+	- Open the MySQL workbench (using remote connection)
+			
+	
+	- into the MySQL shell, writes and execute the following code:
+
+		create database mybox char set utf8mb4;
+
+		use mybox;
+		
+		use mubox;
+		
+		create table usuarios ( 
+			usuario varchar(15) not null, 
+			contra varchar(80) not null, 
+			nombre varchar(25) not null, 
+			email varchar(20) not null unique, 
+			primary key (usuario) 
+		) engine=innodb charset=utf8mb4;
+		
+		
+
+Step 04 - Create directory for the MyBox virtual users
+
+	- Into the remote server
+	
+		mkdir /home/myboxusers
+		
+		chown www-data:www-data /home/myboxusers
+
+		chmod -R 755 /home/myboxusers
+
+
+Step 05. Create PHP environment variables
+
+	- nano /utiles/variables.conf
+	
+		SetEnv HOME_PATH "/home/myboxusers"
+		SetEnv DB_USER "root"
+		SetEnv DB_PASS "password"
+
+	- Save changes
+
+
+Step 06. Configuration of the PHP CGI to load environment variables and custom site
+
+	- nano /etc/apache2/apache2.conf
+	
+		- Add the following instrucction before the directory segment
+			
+			Include /utiles/variables.conf
+
+		
+		- Add the custom behavior to MyBox application
+					
+			<Directory /var/www/html/york/mybox>
+				Options Indexes FollowSymLinks
+				AllowOverride None
+				Require all granted
+
+				#---------------------------------------------------------------------
+				# Forbiden to browse web directory
+				#---------------------------------------------------------------------
+				Options All -Indexes
+
+
+				#---------------------------------------------------------------------
+				# Try and cath error and show the custom page information
+				#---------------------------------------------------------------------
+
+				ErrorDocument 400 http://10.236.2.154/york/mybox/errores/400.php
+				ErrorDocument 403 http://10.236.2.154/york/mybox/errores/403.php
+				ErrorDocument 404 http://10.236.2.154/york/mybox/errores/404.php
+				ErrorDocument 500 http://10.236.2.154/york/mybox/errores/500.php
+
+
+				#---------------------------------------------------------------------
+				# Dennied access to files with the following extensions
+				#---------------------------------------------------------------------
+				
+				<FilesMatch "(\.(bak|config|inc|ini|log|sh|sql)|~)$">
+					Order allow,deny
+					Deny from all
+					Satisfy All
+				</FilesMatch>
+				
+				
+				#---------------------------------------------------------------------------------------
+				# The next instruction force to use https protocol
+				#----------------------------------------------------------------------------------------
+
+				#RewriteEngine on
+				#RewriteCond %{HTTPS} !on
+				#RewriteRule (.*) https://%{HTTP_HOST}%{REQUEST_URI}
+				
+			</Directory>
+
+	- Save changes
+
+
+Step 07 - Restart apache2 service
+
+	apache2ctl graceful
+
+
+Step 08 - Run application
+
+	- In your favorite web browser open the MyBox url
+	
+		http://10.236.2.154/york/mybox
+	
+	
+		If running:
+			print('you be happy, you are in YUPI time')	
+		else:
+			print('No YUPI, try again...!')	
+	
+
+Step 09 - Install https protocol
+
+	- apt-get install openssl ca-certificates
+
+	- mkdir certs (into the user folder)
+
+	- cd certs
+	
+	- openssl genrsa -des3 -out server.key 2048
+	
+		Enter pass phrase for server.key: <password>
+		
+		Verifying - Enter pass phrase for server.key: <the same password>
+		
+		
+	- openssl rsa -in server.key -out server.key.insecure
+
+		Enter pass phrase for server.key: <the same password>
+
+
+	- chmod 600 server.key.insecure
+
+	- ls -lrth 
+	
+	- openssl req -new -key server.key -out server.csr
+	
+		Enter pass phrase for server.key: <the same password>
+		
+		You are about to be asked to enter information that will be
+		incorporated into your certificate request.
+		
+		What you are about to enter is what is called a Distinguished Name
+		or a DN. There are quite a few fields but you can leave some blank
+		
+		For some fields there will be a default value, If you enter '.', the
+		field will be left blank.
+		
+		
+			Country Name (2 letter code) [AU]: CR
+			
+			State or Province Name (full name) [Some-State]: Puntarenas
+			
+			Locality Name (eg, city) []: Puntarenas
+			
+			Organization Name (eg, company) [Internet Widgits Pty Ltd]: UTN
+
+			Organizational Unit Name (eg, section) []: Lab303
+			
+			Common Name (e.g. server FQDN or YOUR name) []: localhost
+			
+			Email Address []: jruiz@utn.ac.cr
+			
+			Please enter the following 'extra' attributes to be sent with your
+			certificate request
+			
+				A challenge password []: <a clue to remember password>
+				
+				An optional company name []:
+				
+				
+	- openssl x509 -req -days 365 -in server.csr -signkey server.key -out server.crt
+	
+		Enter pass phrase for server.key:
+		
+
+	- ls -lrth
+	
+		you can see the next files
+	
+			Archivo 				Description
+			--------------------------------------------------------------------
+			server.key  			The private key with password
+			server.key.insecure 	The private key without password
+			server.csr 				The certificate with sign
+			server.crt 				The self signed certificate
+
+
+	- cp server.key server.key.insecure /etc/ssl/private/
+	
+	- cp server.crt /etc/ssl/certs/
+	
+
+	- nano /etc/apache2/sites-available/default-ssl.conf
+	
+		- SSLCertificateFile /etc/ssl/certs/server.crt
+		- SSLCertificateKeyFile /etc/ssl/private/server.key.insecure
+				
+	- Save changes	
+
+	- a2enmod ssl
+	- a2ensite default-ssl
+	- systemctl reload apache2
+	
+	
+Step 10 - Using the https protocol	
+	
+	- Testing the next URL https://10.236.2.154/york/mybox 
+
+	- Force the run only in https protocol
+	
+		- nano /etc/apache2/apache2.conf
+
+			<Directory /var/www/html/york/mybox>
+				:
+				:
+				:
+				:
+				RewriteEngine on
+				RewriteCond %{HTTPS} !on
+				RewriteRule (.*) https://%{HTTP_HOST}%{REQUEST_URI}
+			</Directory>
+			
+	- Save changes
+	
+	- Change the PHP CGI behavior
+
+		- a2enmod rewrite
+		- apache2ctl graceful
+		
+		
+		If running:
+			print('you be very happy, you are in YUPI time again')	
+		else:
+			print('No YUPI, try again...!')	
+
+			
