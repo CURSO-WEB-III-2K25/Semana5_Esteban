@@ -35,7 +35,6 @@ Step 02 - Publish the MyBox application using FTP connection
 		
 	- Drag and Drop the MyBox directory into remote location 	
 		
-
 Step 03 - Create database on MySQL.
 
 	- Open the MySQL workbench (using remote connection)
@@ -147,8 +146,7 @@ Step 08 - Run application
 	- In your favorite web browser open the MyBox url
 	
 		http://10.236.2.154/york/mybox
-	
-	
+
 		If running:
 			print('you be happy, you are in YUPI time')	
 		else:
