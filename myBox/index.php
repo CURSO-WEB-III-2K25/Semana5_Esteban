@@ -3,7 +3,7 @@
     $Accion_Formulario = $_SERVER['PHP_SELF'];
     if((isset($_POST['txtUsua'])) && (isset($_POST['txtContra']))) {
        
-        $auxSql = sprintf("select nombre, usuario from usuarios Where usuario = '%s' and contra = password('%s')", $_POST['txtUsua'],$_POST['txtContra']);
+        $auxSql = sprintf("select nombre, usuario from usuarios Where usuario = '%s' and contra = sha2('%s', 256)", $_POST['txtUsua'],$_POST['txtContra']);
         $regis = mysqli_query($conex,$auxSql);
 		
         //libera los inputs del cache     
@@ -19,7 +19,8 @@
             $_SESSION["nombre"]=$tupla['nombre'];
 		    $_SESSION["usuario"]=$tupla['usuario'];
 		   
-            header("location: carpetas.php");
+            header("Location: carpetas.php");
+            exit();
         }else {
             header("location: errores/400.php");
             exit(); 

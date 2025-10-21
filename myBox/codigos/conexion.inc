@@ -3,10 +3,12 @@
 	$servidor  = "localhost";
     $basedatos = "mybox";
     $usuario   = "root";
-    $contra    = "parda99*";
+    $contra    = "esteban2511";
 
     //suprime advertencias
-    error_reporting(0);
+    // error_reporting(0);
+    // mostrar todas las advertencias y errores para depuración
+    error_reporting(E_ALL);
 
 	//proceso para conectar con el servidor
     if(!$conex = mysqli_connect($servidor, $usuario, $contra, $basedatos)){
