@@ -1,4 +1,5 @@
 <?php 
+    
     require_once('codigos/conexion.inc'); 
     $Accion_Formulario = $_SERVER['PHP_SELF'];
     if((isset($_POST['txtUsua'])) && (isset($_POST['txtContra']))) {

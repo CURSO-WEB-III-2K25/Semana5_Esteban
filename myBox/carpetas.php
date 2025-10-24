@@ -8,7 +8,7 @@
 		exit(); //fin del scrip
 	}
 
-	$ruta  = "d:\\mybox".'\\'.$_SESSION["usuario"];
+	$ruta  = "c:\\mybox".'\\'.$_SESSION["usuario"];
 	$datos = explode('\\',"d:\\mybox");
 ?>
 <!doctype html>
@@ -39,7 +39,8 @@
 				<?php
 					$conta = 0;
 					$directorio = opendir($ruta);
-					echo '<a href=./agrearchi.php>'.'Agregar archivo</a>';
+					echo '<a href=./agrearchi.php>'.'Agregar archivo&nbsp&nbsp&nbsp</a>';
+					echo '<a href=codigos/crearSubDir.php>'.'Agregar Carpeta</a>';
 					echo '<br><br>';
 					echo '<table class="table table-striped">';
 						echo '<tr>';

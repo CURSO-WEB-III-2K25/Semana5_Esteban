@@ -9,7 +9,7 @@
     }
 
 	//declara ruta carpeta del usuario
-	$ruta = "d:\\mybox";
+	$ruta = "c:\\mybox";
     $ruta = $ruta.'/'.$_SESSION["usuario"];
 
 	$Accion_Formulario = $_SERVER['PHP_SELF'];

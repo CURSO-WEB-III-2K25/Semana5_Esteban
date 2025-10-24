@@ -2,7 +2,7 @@
 	$archivo = $_GET['archi'];
 	session_start();
 
-	$ruta = "d:\\mybox";
+	$ruta = "c:\\mybox";
     $ruta = $ruta.'/'.$_SESSION["usuario"].'/'.$archivo;
 
 	/*Se intenta eliminar un fichero y se informa del resultado.*/
