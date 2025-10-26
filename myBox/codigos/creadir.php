@@ -17,6 +17,6 @@
 		echo 'Favor pongase en contacto con el departamento de servicio al cliente.<br>';
         echo 'Ruta.....'.$ruta;
     }else{
-		header("Location: ../carpetas.php");
+		header("Location: ../carpetas2.php");
 	} // fin del if del mkdir
 ?>

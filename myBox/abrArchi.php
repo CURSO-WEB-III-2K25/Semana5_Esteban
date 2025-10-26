@@ -11,7 +11,7 @@
 	}
 
 	//Declara ruta carpeta del usuario
-	$ruta = "d:\\mybox";
+	$ruta = "c:\\mybox";
 	$ruta = $ruta.'/'.$_SESSION["usuario"].'/'.$archivo;
 
 	$file = fopen($ruta,"r");

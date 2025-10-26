@@ -20,7 +20,7 @@
             $_SESSION["nombre"]=$tupla['nombre'];
 		    $_SESSION["usuario"]=$tupla['usuario'];
 		   
-            header("Location: carpetas.php");
+            header("Location: carpetas2.php");
             exit();
         }else {
             header("location: errores/400.php");
