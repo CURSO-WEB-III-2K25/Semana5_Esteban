@@ -56,7 +56,7 @@ if (isset($_POST['carpetaNueva']) && !empty(trim($_POST['carpetaNueva']))) {
             <input type="text" name="carpetaNueva" placeholder="Nombre de la carpeta" required>
             <br><br>
             <button type="submit">Crear Carpeta</button>
-            <a href="../carpetas.php?ruta=<?php echo urlencode($rutaActual); ?>"><button type="button">Cancelar</button></a>
+            <a href="../carpetas2.php?ruta=<?php echo urlencode($rutaActual); ?>"><button type="button">Cancelar</button></a>
         </form>
     </div>
 </body>

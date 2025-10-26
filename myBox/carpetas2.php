@@ -81,9 +81,7 @@
                     
                     $ruta_elem = $ruta . '\\' . $elem;
                     $sub_ruta = ($ruta_actual ? $ruta_actual . '\\' : '') . $elem;
-
                     echo '<tr>';
-
                     if (is_dir($ruta_elem)) {
                         echo '<th><a href="carpetas2.php?ruta=' . urlencode($sub_ruta) . '">' . htmlspecialchars($elem) . '</a></th>';
                     } elseif (is_file($ruta_elem)) {

@@ -44,8 +44,10 @@
 		$mensaje = "El elemento no existe o no es válido.";
 	}
 
-	// Retorna al punto de invocación
-	$Ir_A = isset($_SERVER["HTTP_REFERER"]) ? $_SERVER["HTTP_REFERER"] : "carpetas2.php";
-	echo "<script>alert('" . addslashes($mensaje) . "'); location.href='" . $Ir_A . "';</script>";
-	exit();
+	//Retorna al punto de invocación
+	$Ir_A = $_SERVER["HTTP_REFERER"];
+	echo "<script language='JavaScript'>";
+	echo "alert('".$mensaje."');";
+	echo "location.href='".$Ir_A."'";
+	echo "</script>";
 ?>
