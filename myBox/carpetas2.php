@@ -73,6 +73,7 @@
                         <th>Lectura</th>
                         <th>Escritura</th>
                         <th>Ejecutable</th>
+                        <th>Compartir</th>
                         <th>Borrar</th>
                     </tr>';
 
@@ -105,7 +106,6 @@
                         }
 
                         $iconPath = 'imagenes/' . $icon;
-
                         echo '<th><a href="abrArchi2.php?arch=' . urlencode($elem) . '&rutaActual=' . urlencode($ruta_actual) . '" style="text-decoration:none; color:inherit;"><img src="' . $iconPath . '" alt="" style="width:16px;height:16px;vertical-align:middle;margin-right:6px;"><span style="vertical-align:middle;">' . htmlspecialchars($elem) . '</span></a></th>';
 
                     } else {
@@ -119,6 +119,20 @@
                     echo '<th>' . (is_readable($ruta_elem) ? 'Sí' : 'No') . '</th>';
                     echo '<th>' . (is_writable($ruta_elem) ? 'Sí' : 'No') . '</th>';
                     echo '<th>' . (is_executable($ruta_elem) ? 'Sí' : 'No') . '</th>';
+
+                    // Columna compartir: sólo si es archivo o carpeta mostramos el formulario
+                    echo '<th>';
+                    if (is_file($ruta_elem) || is_dir($ruta_elem)) {
+                        // Formulario mínimo para enviar al script compartir
+                        echo '<form action="./codigos/compartir.php" method="POST" style="display:inline-block;">';
+                        // archivo: la ruta relativa dentro del usuario
+                        echo '<input type="hidden" name="archivo" value="' . htmlspecialchars($sub_ruta) . '">';
+                        echo '<input type="text" name="destinatario" placeholder="Usuario destino" required style="width:110px;"> ';
+                        echo '<button type="submit">Compartir</button>';
+                        echo '</form>';
+                    }
+                    echo '</th>';
+
                     echo '<th><a href="./codigos/borarchi2.php?carpeta=' . urlencode($ruta_elem) . '">Hacer</a></th>';
 
                     echo '</tr>';
