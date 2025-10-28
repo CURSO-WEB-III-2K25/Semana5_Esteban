@@ -73,6 +73,7 @@
                         <th>Lectura</th>
                         <th>Escritura</th>
                         <th>Ejecutable</th>
+                        <th>Compartir</th>
                         <th>Borrar</th>
                     </tr>';
 
@@ -119,6 +120,20 @@
                     echo '<th>' . (is_readable($ruta_elem) ? 'Sí' : 'No') . '</th>';
                     echo '<th>' . (is_writable($ruta_elem) ? 'Sí' : 'No') . '</th>';
                     echo '<th>' . (is_executable($ruta_elem) ? 'Sí' : 'No') . '</th>';
+
+                    // Columna compartir: sólo si es archivo o carpeta mostramos el formulario
+                    echo '<th>';
+                    if (is_file($ruta_elem) || is_dir($ruta_elem)) {
+                        // Formulario mínimo para enviar al script compartir
+                        echo '<form action="./codigos/compartir.php" method="POST" style="display:inline-block;">';
+                        // archivo: la ruta relativa dentro del usuario
+                        echo '<input type="hidden" name="archivo" value="' . htmlspecialchars($sub_ruta) . '">';
+                        echo '<input type="text" name="destinatario" placeholder="Usuario destino" required style="width:110px;"> ';
+                        echo '<button type="submit">Compartir</button>';
+                        echo '</form>';
+                    }
+                    echo '</th>';
+
                     echo '<th><a href="./codigos/borarchi2.php?carpeta=' . urlencode($ruta_elem) . '">Hacer</a></th>';
 
                     echo '</tr>';
@@ -130,6 +145,70 @@
 
                 if ($conta == 0) {
                     echo 'La carpeta del usuario se encuentra vacía';
+                }
+            ?>
+
+            <?php
+                // === Mostrar recursos compartidos por otros usuarios ===
+                $ruta_compartidos = $base . '\\compartidos';
+
+                if (is_dir($ruta_compartidos)) {
+                    echo '<hr>';
+                    echo '<h4>📁 Recursos compartidos contigo</h4>';
+
+                    $conta_comp = 0;
+                    $dir_comp = opendir($ruta_compartidos);
+                    echo '<table class="table table-striped">';
+                    echo '<tr>
+                            <th>Nombre</th>
+                            <th>Tamaño</th>
+                            <th>Último acceso</th>
+                            <th>Archivo</th>
+                            <th>Directorio</th>
+                            <th>Acciones</th>
+                        </tr>';
+
+                    while ($comp = readdir($dir_comp)) {
+                        if ($comp == '.' || $comp == '..') continue;
+
+                        $ruta_elem = $ruta_compartidos . '\\' . $comp;
+                        $sub_ruta_comp = 'compartidos\\' . $comp; // ruta relativa para abrir
+
+                        echo '<tr>';
+                        if (is_dir($ruta_elem)) {
+                            // Si es directorio, permitimos navegar dentro (envía parametro ruta relativo dentro de carpeta compartidos)
+                            echo '<th><a href="carpetas2.php?ruta=' . urlencode('compartidos\\' . $comp) . '">' . htmlspecialchars($comp) . '</a></th>';
+                        } elseif (is_file($ruta_elem)) {
+                            // Enlace para abrir/descargar con tu script existente (ajusta si hace falta)
+                            echo '<th><a href="abrArchi2.php?arch=' . urlencode($comp) . '&rutaActual=' . urlencode('compartidos') . '">' . htmlspecialchars($comp) . '</a></th>';
+                        } else {
+                            echo '<th>' . htmlspecialchars($comp) . '</th>';
+                        }
+
+                        echo '<th>' . (is_file($ruta_elem) ? filesize($ruta_elem) . ' bytes' : '') . '</th>';
+                        echo '<th>' . date("d/m/y H:i:s", fileatime($ruta_elem)) . '</th>';
+                        echo '<th>' . (is_file($ruta_elem) ? 'Sí' : '') . '</th>';
+                        echo '<th>' . (is_dir($ruta_elem) ? 'Sí' : '') . '</th>';
+
+                        // Acciones: por ahora solo "Abrir" si es archivo, o "Entrar" si es carpeta
+                        echo '<th>';
+                        if (is_file($ruta_elem)) {
+                            echo '<a href="abrArchi2.php?arch=' . urlencode($comp) . '&rutaActual=' . urlencode('compartidos') . '">Abrir</a>';
+                        } elseif (is_dir($ruta_elem)) {
+                            echo '<a href="carpetas2.php?ruta=' . urlencode('compartidos\\' . $comp) . '">Entrar</a>';
+                        }
+                        echo '</th>';
+
+                        echo '</tr>';
+                        $conta_comp++;
+                    }
+
+                    closedir($dir_comp);
+                    echo '</table>';
+
+                    if ($conta_comp == 0) {
+                        echo 'No hay recursos compartidos aún.';
+                    }
                 }
             ?>
         </div>
