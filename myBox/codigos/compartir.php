@@ -69,7 +69,6 @@
 
     // Copiar archivo o carpeta
     copiarR($rutaOrigen, $rutaDestino);
-
     echo "¡En hora buena! El contenido fue compartido exitosamente con '$usuarioDestino'. :D";
     header("Location: ../carpetas2.php");
     exit();
