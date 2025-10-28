@@ -5,6 +5,8 @@
     $usuario   = "root";
     $contra    = "";
 
+
+
     //suprime advertencias
     // error_reporting(0);
     // mostrar todas las advertencias y errores para depuración
