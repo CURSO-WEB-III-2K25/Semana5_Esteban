@@ -64,6 +64,4 @@ copiarR($rutaOrigen, $rutaDestino);
 echo "En hora buena, el contenido fue compartido exitosamente con '$usuarioDestino'. :D";
 
 mysqli_close($conex);
-
-
 ?>

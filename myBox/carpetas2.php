@@ -82,10 +82,32 @@
                     $ruta_elem = $ruta . '\\' . $elem;
                     $sub_ruta = ($ruta_actual ? $ruta_actual . '\\' : '') . $elem;
                     echo '<tr>';
+
                     if (is_dir($ruta_elem)) {
-                        echo '<th><a href="carpetas2.php?ruta=' . urlencode($sub_ruta) . '">' . htmlspecialchars($elem) . '</a></th>';
+                        //aqui poner imagen de una carpeta
+                        echo '<th><span><img src=" imagenes/folder.svg"></span>&nbsp;<a href="carpetas2.php?ruta=' . urlencode($sub_ruta) . '">' . htmlspecialchars($elem) . '</a></th>';
+
                     } elseif (is_file($ruta_elem)) {
-                        echo '<th><a href="abrArchi.php?arch=' . urlencode($elem) . '&rutaActual=' . urlencode($ruta_actual) . '">' . htmlspecialchars($elem) . '</a></th>';
+                        //en esta linea debo poner validar las imagenes de los archivos
+                        $ext = strtolower(pathinfo($elem, PATHINFO_EXTENSION));
+                        $icon = "file.png";
+
+                        if ($ext === 'pdf') {
+                            $icon = "filetype-pdf.svg";
+                        } elseif ($ext === 'xls' || $ext === 'xlsx' || $ext === 'csv') {
+                            $icon = "file-excel.svg";
+                        } elseif ($ext === 'doc' || $ext === 'docx') {
+                            $icon = "file-earmark-word.svg";
+                        } elseif ($ext === 'ppt' || $ext === 'pptx') {
+                            $icon = "filetype-ppt.svg";
+                        } elseif ($ext === 'png' || $ext === 'jpg' || $ext === 'jpeg' || $ext === 'gif' || $ext === 'bmp' || $ext === 'webp') {
+                            $icon = "filetype-png.svg";
+                        }
+
+                        $iconPath = 'imagenes/' . $icon;
+
+                        echo '<th><a href="abrArchi2.php?arch=' . urlencode($elem) . '&rutaActual=' . urlencode($ruta_actual) . '" style="text-decoration:none; color:inherit;"><img src="' . $iconPath . '" alt="" style="width:16px;height:16px;vertical-align:middle;margin-right:6px;"><span style="vertical-align:middle;">' . htmlspecialchars($elem) . '</span></a></th>';
+
                     } else {
                         echo '<th>' . htmlspecialchars($elem) . '</th>';
                     }

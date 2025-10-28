@@ -1,22 +1,30 @@
 <?php
-	//Inicio la sesión
-	session_start();
+session_start();
 
-	//Utiliza los datos de sesion comprueba que el usuario este autenticado
-	if ($_SESSION["autenticado"] != "SI") {
-		header("Location: ../index.php");
-		exit(); //fin del script
-	}
+// Comprueba que el usuario esté autenticado
+if (!isset($_SESSION["autenticado"]) || $_SESSION["autenticado"] != "SI") {
+    header("Location: ../index.php");
+    exit();
+}
 
-	//declara ruta carpeta del usuario
-	$ruta = "c:\\mybox";
-	$ruta = $ruta.'/'.$_SESSION["usuario"];
+// Ruta base donde se guardarán las carpetas de los usuarios
+$rutaBase = "C:\\mybox"; // En Windows, usa doble barra invertida \\
 
-	if(!mkdir($ruta,0700)){
-		echo 'ERROR:\\ NO se pudo crear directorio para almacenar archivos.<br>';
-		echo 'Favor pongase en contacto con el departamento de servicio al cliente.<br>';
-        echo 'Ruta.....'.$ruta;
-    }else{
-		header("Location: ../carpetas2.php");
-	} // fin del if del mkdir
+// Ruta del usuario (ej: C:\mybox\laura)
+$rutaUsuario = $rutaBase . "\\" . $_SESSION["usuario"];
+
+// Si la carpeta base no existe, créala
+if (!is_dir($rutaBase)) {
+    mkdir($rutaBase, 0700, true);
+}
+
+// Intentar crear la carpeta del usuario
+if (!mkdir($rutaUsuario, 0700, true)) {
+    echo 'ERROR:<br>No se pudo crear el directorio para almacenar archivos.<br>';
+    echo 'Verifique permisos o contacte al administrador.<br>';
+    echo 'Ruta: ' . $rutaUsuario;
+} else {
+    header("Location: ../carpetas2.php");
+    exit();
+}
 ?>
