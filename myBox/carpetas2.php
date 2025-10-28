@@ -85,7 +85,7 @@
                     if (is_dir($ruta_elem)) {
                         echo '<th><a href="carpetas2.php?ruta=' . urlencode($sub_ruta) . '">' . htmlspecialchars($elem) . '</a></th>';
                     } elseif (is_file($ruta_elem)) {
-                        echo '<th><a href="abrArchi.php?arch=' . urlencode($elem) . '&rutaActual=' . urlencode($ruta_actual) . '">' . htmlspecialchars($elem) . '</a></th>';
+                        echo '<th><a href="abrArchi2.php?arch=' . urlencode($elem) . '&rutaActual=' . urlencode($ruta_actual) . '">' . htmlspecialchars($elem) . '</a></th>';
                     } else {
                         echo '<th>' . htmlspecialchars($elem) . '</th>';
                     }
