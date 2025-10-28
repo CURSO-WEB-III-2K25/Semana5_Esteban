@@ -66,13 +66,20 @@
             copy($origen, $destino);
         }
     }
-
     // Copiar archivo o carpeta
     copiarR($rutaOrigen, $rutaDestino);
-    echo "¡En hora buena! El contenido fue compartido exitosamente con '$usuarioDestino'. :D";
-    header("Location: ../carpetas2.php");
-    exit();
+    // Preparar mensaje y retorno al punto de invocación (HTTP_REFERER)
+    $mensaje = "¡En hora buena! El contenido fue compartido exitosamente con '$usuarioDestino'. :D";
+    $Ir_A = isset($_SERVER['HTTP_REFERER']) && $_SERVER['HTTP_REFERER'] !== '' ? $_SERVER['HTTP_REFERER'] : '../carpetas2.php';
 
+    // Cerrar conexión antes de enviar salida
     mysqli_close($conex);
+
+    // Usar json_encode para asegurar el correcto escape en JavaScript
+    echo "<script language='JavaScript'>";
+    echo "alert(" . json_encode($mensaje) . ");";
+    echo "location.href=" . json_encode($Ir_A) . ";";
+    echo "</script>";
+    exit();
 ?>
 
