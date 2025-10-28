@@ -3,7 +3,7 @@
 	$servidor  = "localhost";
     $basedatos = "mybox";
     $usuario   = "root";
-    $contra    = "";
+    $contra    = "esteban2511";
 
     //suprime advertencias
     // error_reporting(0);
